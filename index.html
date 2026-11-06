@@ -204,7 +204,7 @@
     }
 
     .form-group {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .form-group label {
@@ -214,7 +214,8 @@
       margin-bottom: 5px;
     }
 
-    .form-group input {
+    .form-group input,
+    .form-group select {
       width: 100%;
       padding: 10px 14px;
       background-color: #1a1a1a;
@@ -226,8 +227,14 @@
       transition: border-color 0.2s;
     }
 
-    .form-group input:focus {
+    .form-group input:focus,
+    .form-group select:focus {
       border-color: var(--gold-primary);
+    }
+
+    .form-group select option {
+      background-color: #141414;
+      color: #fff;
     }
 
     /* Barra Inferior Fixa (Carrinho) */
@@ -408,8 +415,18 @@
         <input type="text" id="client-name" placeholder="Digite seu nome" required />
       </div>
       <div class="form-group">
-        <label for="client-address">Endereço Completo *</label>
-        <input type="text" id="client-address" placeholder="Rua, Número, Bairro, Cidade" required />
+        <label for="client-city">Cidade *</label>
+        <input type="text" id="client-city" placeholder="Digite sua cidade" required />
+      </div>
+      <div class="form-group">
+        <label for="payment-method">Forma de Pagamento *</label>
+        <select id="payment-method" required>
+          <option value="" disabled selected>Selecione a forma de pagamento</option>
+          <option value="Pix">Pix</option>
+          <option value="Cartão de Crédito">Cartão de Crédito</option>
+          <option value="Cartão de Débito">Cartão de Débito</option>
+          <option value="Dinheiro">Dinheiro</option>
+        </select>
       </div>
     </section>
   </main>
@@ -460,7 +477,8 @@
 
     function sendToWhatsApp() {
       const name = document.getElementById('client-name').value.trim();
-      const address = document.getElementById('client-address').value.trim();
+      const city = document.getElementById('client-city').value.trim();
+      const paymentMethod = document.getElementById('payment-method').value;
 
       if (!name) {
         alert("Por favor, preencha o seu NOME.");
@@ -468,9 +486,15 @@
         return;
       }
 
-      if (!address) {
-        alert("Por favor, preencha o seu ENDEREÇO.");
-        document.getElementById('client-address').focus();
+      if (!city) {
+        alert("Por favor, preencha a sua CIDADE.");
+        document.getElementById('client-city').focus();
+        return;
+      }
+
+      if (!paymentMethod) {
+        alert("Por favor, selecione a FORMA DE PAGAMENTO.");
+        document.getElementById('payment-method').focus();
         return;
       }
 
@@ -483,7 +507,8 @@
 
       let message = `*Olá! Novo pedido realizado:*\n\n`;
       message += `👤 *Nome:* ${name}\n`;
-      message += `📍 *Endereço:* ${address}\n\n`;
+      message += `🏙️ *Cidade:* ${city}\n`;
+      message += `💳 *Forma de Pagamento:* ${paymentMethod}\n\n`;
       message += `*Itens do Pedido:*\n`;
 
       selectedProducts.forEach(item => {
