@@ -33,7 +33,7 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding-bottom: 120px;
+      padding-bottom: 140px;
     }
 
     /* Cabeçalho / Banner */
@@ -49,6 +49,27 @@
       width: 100%;
       height: auto;
       display: block;
+    }
+
+    /* Texto Piscando */
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+
+    .promo-banner-text {
+      width: 100%;
+      max-width: 900px;
+      background-color: #1a1200;
+      color: var(--gold-primary);
+      text-align: center;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #332200;
+      animation: blink 1.5s infinite ease-in-out;
     }
 
     /* Container de Produtos */
@@ -165,6 +186,50 @@
       text-align: center;
     }
 
+    /* Seção de Dados do Cliente */
+    .client-section {
+      width: 100%;
+      max-width: 900px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 25px;
+    }
+
+    .client-section h3 {
+      font-size: 1.05rem;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      background-color: #1a1a1a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--gold-primary);
+    }
+
     /* Barra Inferior Fixa (Carrinho) */
     .bottom-bar {
       position: fixed;
@@ -256,6 +321,11 @@
     <img src="1.jpeg" alt="SlimPower Resultados Reais" />
   </header>
 
+  <!-- Texto Piscando -->
+  <div class="promo-banner-text">
+    NÃO PERCA, COMPRE HOJE MESMO E APROVEITA NOSSA PROMOÇÃO IMPERDÍVEL!
+  </div>
+
   <!-- Catálogo de Produtos -->
   <main class="container">
     <div class="grid-products">
@@ -329,6 +399,19 @@
       </article>
 
     </div>
+
+    <!-- Seção de Dados do Cliente -->
+    <section class="client-section">
+      <h3>Identificação para o Pedido</h3>
+      <div class="form-group">
+        <label for="client-name">Nome Completo *</label>
+        <input type="text" id="client-name" placeholder="Digite seu nome" required />
+      </div>
+      <div class="form-group">
+        <label for="client-address">Endereço Completo *</label>
+        <input type="text" id="client-address" placeholder="Rua, Número, Bairro, Cidade" required />
+      </div>
+    </section>
   </main>
 
   <!-- Rodapé com Total e Botão WhatsApp -->
@@ -376,6 +459,21 @@
     }
 
     function sendToWhatsApp() {
+      const name = document.getElementById('client-name').value.trim();
+      const address = document.getElementById('client-address').value.trim();
+
+      if (!name) {
+        alert("Por favor, preencha o seu NOME.");
+        document.getElementById('client-name').focus();
+        return;
+      }
+
+      if (!address) {
+        alert("Por favor, preencha o seu ENDEREÇO.");
+        document.getElementById('client-address').focus();
+        return;
+      }
+
       const selectedProducts = Object.values(products).filter(item => item.qty > 0);
 
       if (selectedProducts.length === 0) {
@@ -383,7 +481,10 @@
         return;
       }
 
-      let message = "*Olá! Gostaria de fazer o seguinte pedido:*\n\n";
+      let message = `*Olá! Novo pedido realizado:*\n\n`;
+      message += `👤 *Nome:* ${name}\n`;
+      message += `📍 *Endereço:* ${address}\n\n`;
+      message += `*Itens do Pedido:*\n`;
 
       selectedProducts.forEach(item => {
         const itemTotal = (item.price * item.qty).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
